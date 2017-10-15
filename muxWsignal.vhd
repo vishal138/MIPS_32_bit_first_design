@@ -35,7 +35,6 @@ entity muxWsignal is
            c : out  STD_LOGIC_VECTOR (4 downto 0);
            sel : in  STD_LOGIC);
 end muxWsignal;
-
 architecture Behavioral of muxWsignal is
 begin
 	process(a,b)

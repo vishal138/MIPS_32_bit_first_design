@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    07:08:26 10/12/2017 
+-- Create Date:    13:48:01 10/15/2017 
 -- Design Name: 
--- Module Name:    Main - Behavioral 
+-- Module Name:    reg_pc - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,20 +29,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Main is
-end Main;
-architecture Behavioral of Main is
-Component alu_main is
-	Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
-           b : in  STD_LOGIC_VECTOR (31 downto 0);
-           carry_out : out  STD_LOGIC;
-           alu_opn : in  STD_LOGIC_VECTOR (3 downto 0);
-           zero : out  STD_LOGIC;
-           result : out  STD_LOGIC_VECTOR (31 downto 0);
-           overflow : out  STD_LOGIC);
-end component;
+entity reg_pc is
+    Port ( clk : in  STD_LOGIC;
+           pc : out  STD_LOGIC_VECTOR (31 downto 0);
+           pc_next : in  STD_LOGIC_VECTOR (31 downto 0));
+end reg_pc;
+
+architecture Behavioral of reg_pc is
 begin
-
-
+	process(clk)
+	begin
+		if(clk='1') then
+			pc <= pc_next;
+		end if;
+	end process;
 end Behavioral;
 

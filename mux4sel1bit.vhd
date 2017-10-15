@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    07:08:26 10/12/2017 
+-- Create Date:    04:53:53 10/14/2017 
 -- Design Name: 
--- Module Name:    Main - Behavioral 
+-- Module Name:    mux4sel1bit - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,20 +29,27 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Main is
-end Main;
-architecture Behavioral of Main is
-Component alu_main is
-	Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
-           b : in  STD_LOGIC_VECTOR (31 downto 0);
-           carry_out : out  STD_LOGIC;
-           alu_opn : in  STD_LOGIC_VECTOR (3 downto 0);
-           zero : out  STD_LOGIC;
-           result : out  STD_LOGIC_VECTOR (31 downto 0);
-           overflow : out  STD_LOGIC);
-end component;
+entity mux4sel1bit is
+    Port ( a : in  STD_LOGIC;
+           b : in  STD_LOGIC;
+           c : in  STD_LOGIC;
+           d : in  STD_LOGIC;
+           sel : in  STD_LOGIC_VECTOR (1 downto 0);
+           e : out  STD_LOGIC);
+end mux4sel1bit;
+
+architecture Behavioral of mux4sel1bit is
 begin
-
-
+	process(a,b,c,d,sel)
+	begin
+		if(sel = "00") then
+			e <= a;
+		elsif(sel = "01") then
+			e <= b;
+		elsif(sel = "10") then
+			e <= c;
+		else
+			e <= d;
+		end if;
+	end process;
 end Behavioral;
-

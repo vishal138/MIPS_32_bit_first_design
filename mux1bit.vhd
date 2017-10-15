@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    07:08:26 10/12/2017 
+-- Create Date:    04:29:56 10/14/2017 
 -- Design Name: 
--- Module Name:    Main - Behavioral 
+-- Module Name:    mux1bit - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,20 +29,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Main is
-end Main;
-architecture Behavioral of Main is
-Component alu_main is
-	Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
-           b : in  STD_LOGIC_VECTOR (31 downto 0);
-           carry_out : out  STD_LOGIC;
-           alu_opn : in  STD_LOGIC_VECTOR (3 downto 0);
-           zero : out  STD_LOGIC;
-           result : out  STD_LOGIC_VECTOR (31 downto 0);
-           overflow : out  STD_LOGIC);
-end component;
-begin
+entity mux1bit is
+    Port ( a : in  STD_LOGIC;
+           b : in  STD_LOGIC;
+           sel : in  STD_LOGIC;
+           c : out  STD_LOGIC);
+end mux1bit;
 
+architecture Behavioral of mux1bit is
+
+begin
+	process(a,b,sel)
+	begin
+		if(sel = '0') then
+			c <= a;
+		else
+			c <= b;
+		end if;
+	end process;
 
 end Behavioral;
-

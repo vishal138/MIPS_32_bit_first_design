@@ -33,10 +33,11 @@ entity alu_main is
     Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
            b : in  STD_LOGIC_VECTOR (31 downto 0);
            carry_out : out  STD_LOGIC;
-           alu_opn : in  STD_LOGIC_VECTOR (3 downto 0);
+           alu_opn : in  STD_LOGIC_VECTOR (2 downto 0);
            zero : out  STD_LOGIC;
-           result : out  STD_LOGIC_VECTOR (31 downto 0);
-           overflow : out  STD_LOGIC);
+			  --overflow : out  STD_LOGIC;
+           alu_result : out  STD_LOGIC_VECTOR (31 downto 0)
+			  );
 end alu_main;
 
 architecture Behavioral of alu_main is
@@ -44,20 +45,60 @@ Component alu1bit is
  Port ( 
 			  a : in  STD_LOGIC;
            b : in  STD_LOGIC;
-           less : in  STD_LOGIC;
-           binv : in  STD_LOGIC;
            ainv : in  STD_LOGIC;
-			  clk : in STD_LOGIC;
+			  binv : in  STD_LOGIC;
            cin : in  STD_LOGIC;
            aluop : in  STD_LOGIC_VECTOR(1 downto 0);
            cout : out  STD_LOGIC;
            alu_out : out  STD_LOGIC);
 end component;
-variable result:std_logic_vector(31 downto 0);
-variable less,ainv,binv,cin: STD_LOGIC:='0';
+signal result,c_out,temp_zero:std_logic_vector(31 downto 0);
+signal ainv,binv,cin: STD_LOGIC:='0';
+signal alu_op : STD_LOGIC_VECTOR(1 downto 0)  := "00";
 begin
-	for i in 0 to 31 loop
-		U:alu1bit PORT MAP(a(i),b(i),'1',
-
+	process(alu_opn)
+	begin	
+		case alu_opn is
+			when "001" =>				--add
+				ainv <= '0';
+				binv <= '0';
+				cin <= '0';
+				alu_op <= "10";
+			when "010" =>				--sub
+				ainv <= '0';
+				binv <= '1';
+				cin <= '1';
+				alu_op <= "10";
+			when "011" =>				--and
+				ainv <= '0';
+				binv <= '0';
+				cin <= '0';
+				alu_op <= "00";
+			when "100" =>				--or
+				ainv <= '0';
+				binv <= '0';
+				cin <= '0';
+				alu_op <= "01";
+			when "101" =>				--nand
+				ainv <= '1';
+				binv <= '1';
+				cin <= '0';
+				alu_op <= "01";
+			when "110" =>           --nor
+				ainv <= '1';
+				binv <= '1';
+				cin <= '0';
+				alu_op <= "10";
+			when others =>
+				alu_op <= "11";
+		end case;
+	end process;
+		U1: alu1bit PORT MAP(a(0),b(0),ainv,binv,cin,alu_op,c_out(0),result(0));
+	for_loop:for i in 1 to 31 generate
+		U:alu1bit PORT MAP(a(i),b(i),ainv,binv,c_out(i-1),alu_op,c_out(i),result(i));
+		temp_zero(i) <= temp_zero(i-1) nor result(i);
+	end generate;
+	zero <= temp_zero(31);
+	alu_result <= result;
+	carry_out <= c_out(31);
 end Behavioral;
-

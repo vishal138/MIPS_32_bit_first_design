@@ -20,13 +20,9 @@ WARNING:Xst:3164 - Option "-debug" found multiple times in the command line. Onl
 =========================================================================
 *                          HDL Compilation                              *
 =========================================================================
-Compiling vhdl file "/home/vishal/xilinx/MIPS_32_bit_first_design/mux1bit.vhd" in Library work.
-Architecture behavioral of Entity mux1bit is up to date.
-Compiling vhdl file "/home/vishal/xilinx/MIPS_32_bit_first_design/mux4sel1bit.vhd" in Library work.
-Architecture behavioral of Entity mux4sel1bit is up to date.
-Compiling vhdl file "/home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd" in Library work.
-Entity <alu1bit> compiled.
-Entity <alu1bit> (Architecture <behavioral>) compiled.
+Compiling vhdl file "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd" in Library work.
+Entity <Main> compiled.
+Entity <Main> (Architecture <Behavioral>) compiled.
 
 
 Total REAL time to Xst completion: 0.00 secs
@@ -35,7 +31,7 @@ Total CPU time to Xst completion: 0.06 secs
 --> 
 
 
-Total memory usage is 474960 kilobytes
+Total memory usage is 474560 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :    1 (   0 filtered)

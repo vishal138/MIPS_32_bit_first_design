@@ -1,0 +1,5 @@
+set -tmpdir "/home/vishal/xilinx/MIPS_32_bit_first_design/xst/projnav.tmp"
+set -xsthdpdir "/home/vishal/xilinx/MIPS_32_bit_first_design/xst"
+elaborate
+-ifn Main.prj
+-ifmt mixed

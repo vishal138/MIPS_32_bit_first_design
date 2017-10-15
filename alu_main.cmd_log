@@ -1,0 +1,1 @@
+xst -intstyle ise -ifn "/home/vishal/xilinx/MIPS_32_bit_first_design/alu_main.xst" -ofn "/home/vishal/xilinx/MIPS_32_bit_first_design/alu_main.syr" 

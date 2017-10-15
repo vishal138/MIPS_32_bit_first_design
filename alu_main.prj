@@ -1,1 +1,4 @@
+vhdl work "mux4sel1bit.vhd"
+vhdl work "mux1bit.vhd"
+vhdl work "alu1bit.vhd"
 vhdl work "alu_main.vhd"
