@@ -30,11 +30,11 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity data_memory is
-	Port (	add : in  STD_LOGIC_VECTOR (31 downto 0);
-            RD : out  STD_LOGIC_VECTOR (31 downto 0);
-			   we : in STD_LOGIC; 
-				clk : in STD_LOGIC;
-			   WD : in STD_LOGIC_VECTOR (31 downto 0));
+	Port (	clk : in STD_LOGIC;
+				add : in  STD_LOGIC_VECTOR (31 downto 0);
+			   we : in STD_LOGIC;
+			   WD : in STD_LOGIC_VECTOR (31 downto 0);
+				RD : out  STD_LOGIC_VECTOR (31 downto 0));
 end data_memory;
 
 architecture Behavioral of data_memory is
@@ -55,4 +55,3 @@ begin
 		end if;
 	end process;
 end Behavioral;
-

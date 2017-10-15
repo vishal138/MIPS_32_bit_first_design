@@ -1,0 +1,4 @@
+xst -intstyle ise -ifn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.xst" -ofn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.syr" 
+xst -intstyle ise -ifn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.xst" -ofn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.syr" 
+xst -intstyle ise -ifn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.xst" -ofn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.syr" 
+xst -intstyle ise -ifn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.xst" -ofn "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.syr" 

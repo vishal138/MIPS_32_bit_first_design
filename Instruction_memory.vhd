@@ -31,7 +31,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity Instruction_memory is
     Port ( pc : in  STD_LOGIC_VECTOR (31 downto 0);
-           instr : out  STD_LOGIC_VECTOR (31 downto 0);
+           instrF : out  STD_LOGIC_VECTOR (31 downto 0);
 			  wr : in STD_LOGIC;                                   --this is for programming
 			  data : in STD_LOGIC_VECTOR (31 downto 0));
 end Instruction_memory;
@@ -48,7 +48,7 @@ begin
 			instr_reg(temp) <= data;
 		else
 			temp := to_integer(unsigned(pc(31 downto 0)));
-			instr <= instr_reg(temp);
+			instrF <= instr_reg(temp);
 		end if;
 	end process;
 end Behavioral;

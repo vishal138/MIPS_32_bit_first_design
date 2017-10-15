@@ -31,13 +31,13 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity register_file is
-    Port ( rd_1 : in  STD_LOGIC_VECTOR (4 downto 0);
-           rd_2 : in  STD_LOGIC_VECTOR (4 downto 0);
+    Port ( clk : in  STD_LOGIC;
+			  r1 : in  STD_LOGIC_VECTOR (4 downto 0);
+           r2 : in  STD_LOGIC_VECTOR (4 downto 0);
            wr : in  STD_LOGIC_VECTOR (4 downto 0);
-           clk : in  STD_LOGIC;
            wr_enable : in  STD_LOGIC;
-           R1 : out  STD_LOGIC_VECTOR (31 downto 0);
-           R2 : out  STD_LOGIC_VECTOR (31 downto 0);
+           R1D : out  STD_LOGIC_VECTOR (31 downto 0);
+           R2D : out  STD_LOGIC_VECTOR (31 downto 0);
            W3 : in  STD_LOGIC_VECTOR (31 downto 0));
 end register_file;
 
@@ -49,10 +49,10 @@ begin
 	VARIABLE temp:integer range 0 to 31 := 0;
 	begin
 		if(clk = '1') then
-			temp := to_integer(unsigned(rd_1(4 downto 0)));
-			R1 <= reg(temp);
-			temp := to_integer(unsigned(rd_2(4 downto 0)));
-			R2 <= reg(temp);
+			temp := to_integer(unsigned(r1(4 downto 0)));
+			R1D <= reg(temp);
+			temp := to_integer(unsigned(r2(4 downto 0)));
+			R2D <= reg(temp);
 		elsif(clk = '0' and wr_enable = '1') then           --this accounts for RAW Hazard  
 				temp := to_integer(unsigned(wr(4 downto 0)));
 				reg(temp) <= W3;	

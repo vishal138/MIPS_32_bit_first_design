@@ -31,6 +31,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity reg_fetch is
     Port ( clk : in  STD_LOGIC;
+			  clrFetch : in STD_LOGIC;
+			  stallFetch : in STD_LOGIC;
            instrF : in  STD_LOGIC_VECTOR (31 downto 0);
            instrD : out  STD_LOGIC_VECTOR (31 downto 0);
            pc_plus4F : in  STD_LOGIC_VECTOR (31 downto 0);
@@ -41,10 +43,14 @@ architecture Behavioral of reg_fetch is
 begin
 	process(clk)
 	begin
-		if(clk='1') then
-			instrD <= instrF;
-			pc_plus4D  <= pc_plus4F;
+		if(clk='1' and stallFetch = '0') then
+			if(clrFetch = '0') then
+				instrD <= instrF;
+				pc_plus4D  <= pc_plus4F;
+			elsif(clrFetch = '1') then       --for flushing data
+				instrD <= instrF;
+				pc_plus4D  <= pc_plus4F;
+			end if;
 		end if;
 	end process;
 end Behavioral;
-

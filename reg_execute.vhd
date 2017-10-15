@@ -31,6 +31,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity reg_execute is
     Port ( clk : in  STD_LOGIC;
+			  clrExecute : in STD_LOGIC;
+			  stallExecute : in STD_LOGIC;
 			  RegWriteE : in  STD_LOGIC;
            RegWriteM : out  STD_LOGIC;
            MemtoRegE : in  STD_LOGIC;
@@ -39,14 +41,14 @@ entity reg_execute is
            MemWriteM : out  STD_LOGIC;
            BranchE : in  STD_LOGIC;
            BranchM : out  STD_LOGIC;
-           ZeroE : inout  STD_LOGIC;
+           ZeroE : in  STD_LOGIC;
            ZeroM : out  STD_LOGIC;
-           AluOutE : in  STD_LOGIC_VECTOR (31 downto 0);
-           AluOutM : out  STD_LOGIC_VECTOR (31 downto 0);
+           AluResultE : in  STD_LOGIC_VECTOR (31 downto 0);
+           AluResultM : out  STD_LOGIC_VECTOR (31 downto 0);
            WriteDataE : in  STD_LOGIC_VECTOR (31 downto 0);
            WriteDataM : out  STD_LOGIC_VECTOR (31 downto 0);
            WriteRegE : in  STD_LOGIC_VECTOR (4 downto 0);
-           WriteRegM : in  STD_LOGIC_VECTOR (4 downto 0);
+           WriteRegM : out  STD_LOGIC_VECTOR (4 downto 0);
            PCBranchE : in  STD_LOGIC_VECTOR (31 downto 0);
            PCBranchM : out  STD_LOGIC_VECTOR (31 downto 0));
 end reg_execute;
@@ -55,17 +57,28 @@ architecture Behavioral of reg_execute is
 begin
 	process(clk)
 	begin
-		if(clk='1') then
-			RegWriteM <= RegWriteE;
-			MemtoRegM <= MemtoRegE;
-			MemWriteM <= MemWriteE;
-			BranchM <= BranchE;
-			ZeroM <= ZeroE;
-			AluOutM <= AluOutE;
-			WriteDataM <= WriteDataE;
-			WriteRegM <= WriteRegE;
-			PCBranchM <= PCBranchE;
+		if(clk='1' and stallExecute = '0') then
+			if(clrExecute = '0') then
+				RegWriteM <= RegWriteE;
+				MemtoRegM <= MemtoRegE;
+				MemWriteM <= MemWriteE;
+				BranchM <= BranchE;
+				ZeroM <= ZeroE;
+				AluResultM <= AluResultE;
+				WriteDataM <= WriteDataE;
+				WriteRegM <= WriteRegE;
+				PCBranchM <= PCBranchE;
+			elsif(clrExecute = '1') then       --for flushing data
+				RegWriteM <= RegWriteE;
+				MemtoRegM <= MemtoRegE;
+				MemWriteM <= MemWriteE;
+				BranchM <= BranchE;
+				ZeroM <= ZeroE;
+				AluResultM <= AluResultE;
+				WriteDataM <= WriteDataE;
+				WriteRegM <= WriteRegE;
+				PCBranchM <= PCBranchE;
+			end if;
 		end if;
 	end process;
 end Behavioral;
-

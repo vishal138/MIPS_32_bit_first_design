@@ -1,82 +1,126 @@
-V3 39
+V3 71
 FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd 2017/10/14.05:22:20 P.20131013
-EN work/alu1bit 1507940455 \
+EN work/alu1bit 1508099777 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/alu1bit/Behavioral 1507940456 \
-      FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd EN work/alu1bit 1507940455 \
+AR work/alu1bit/Behavioral 1508099778 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd EN work/alu1bit 1508099777 \
       CP mux1bit CP mux4sel1bit
 FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu_adder.vhd 2017/10/12.10:32:05 P.20131013
-EN work/alu_adder 1507784531 \
+EN work/alu_adder 1508099783 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu_adder.vhd \
       PB ieee/std_logic_1164 1381692176 PB ieee/STD_LOGIC_UNSIGNED 1381692179
-AR work/alu_adder/Behavioral 1507784532 \
+AR work/alu_adder/Behavioral 1508099784 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu_adder.vhd \
-      EN work/alu_adder 1507784531
-FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu_main.vhd 2017/10/14.05:50:36 P.20131013
-EN work/alu_main 1507940457 \
+      EN work/alu_adder 1508099783
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu_main.vhd 2017/10/15.17:29:50 P.20131013
+EN work/alu_main 1508099799 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu_main.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/alu_main/Behavioral 1507940458 \
+AR work/alu_main/Behavioral 1508099800 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/alu_main.vhd \
-      EN work/alu_main 1507940457 CP alu1bit
-FL /home/vishal/xilinx/MIPS_32_bit_first_design/data_memory.vhd 2017/10/12.10:19:25 P.20131013
-EN work/data_memory 1507783770 \
+      EN work/alu_main 1508099799 CP alu1bit
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/data_memory.vhd 2017/10/15.17:46:14 P.20131013
+EN work/data_memory 1508099803 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/data_memory.vhd \
       PB ieee/std_logic_1164 1381692176 PB ieee/STD_LOGIC_UNSIGNED 1381692179 \
       PB ieee/NUMERIC_STD 1381692181
-AR work/data_memory/Behavioral 1507783771 \
+AR work/data_memory/Behavioral 1508099804 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/data_memory.vhd \
-      EN work/data_memory 1507783770
-FL /home/vishal/xilinx/MIPS_32_bit_first_design/Instruction_memory.vhd 2017/10/12.10:18:16 P.20131013
-EN work/Instruction_memory 1507783704 \
+      EN work/data_memory 1508099803
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/Instruction_memory.vhd 2017/10/15.15:35:30 P.20131013
+EN work/Instruction_memory 1508099785 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/Instruction_memory.vhd \
       PB ieee/std_logic_1164 1381692176 PB ieee/STD_LOGIC_UNSIGNED 1381692179 \
       PB ieee/NUMERIC_STD 1381692181
-AR work/Instruction_memory/Behavioral 1507783705 \
+AR work/Instruction_memory/Behavioral 1508099786 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/Instruction_memory.vhd \
-      EN work/Instruction_memory 1507783704
-FL /home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd 2017/10/14.03:18:58 P.20131013
-EN work/Main 1507931349 FL /home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd \
+      EN work/Instruction_memory 1508099785
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd 2017/10/16.02:06:04 P.20131013
+EN work/Main 1508099807 FL /home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/Main/Behavioral 1507931350 \
-      FL /home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd EN work/Main 1507931349
+AR work/Main/Behavioral 1508099808 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd EN work/Main 1508099807 \
+      CP mux2data CP reg_pc CP alu_adder CP Instruction_memory CP reg_fetch \
+      CP sign_extension CP register_file CP reg_decode CP muxWsignal CP mul4 \
+      CP alu_main CP reg_execute CP data_memory CP reg_memory
 FL /home/vishal/xilinx/MIPS_32_bit_first_design/mul4.vhd 2017/10/12.10:28:17 P.20131013
-EN work/mul4 1507784305 FL /home/vishal/xilinx/MIPS_32_bit_first_design/mul4.vhd \
+EN work/mul4 1508099797 FL /home/vishal/xilinx/MIPS_32_bit_first_design/mul4.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/mul4/Behavioral 1507784306 \
-      FL /home/vishal/xilinx/MIPS_32_bit_first_design/mul4.vhd EN work/mul4 1507784305
+AR work/mul4/Behavioral 1508099798 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/mul4.vhd EN work/mul4 1508099797
 FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux1bit.vhd 2017/10/14.04:47:15 P.20131013
-EN work/mux1bit 1507940451 \
+EN work/mux1bit 1508099773 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux1bit.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/mux1bit/Behavioral 1507940452 \
-      FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux1bit.vhd EN work/mux1bit 1507940451
+AR work/mux1bit/Behavioral 1508099774 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux1bit.vhd EN work/mux1bit 1508099773
 FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux4sel1bit.vhd 2017/10/14.04:56:57 P.20131013
-EN work/mux4sel1bit 1507940453 \
+EN work/mux4sel1bit 1508099775 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux4sel1bit.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/mux4sel1bit/Behavioral 1507940454 \
+AR work/mux4sel1bit/Behavioral 1508099776 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux4sel1bit.vhd \
-      EN work/mux4sel1bit 1507940453
-FL /home/vishal/xilinx/MIPS_32_bit_first_design/muxWsignal.vhd 2017/10/12.10:35:22 P.20131013
-EN work/muxWsignal 1507784734 \
+      EN work/mux4sel1bit 1508099775
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/muxWsignal.vhd 2017/10/14.04:31:30 P.20131013
+EN work/muxWsignal 1508099795 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/muxWsignal.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/muxWsignal/Behavioral 1507784735 \
+AR work/muxWsignal/Behavioral 1508099796 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/muxWsignal.vhd \
-      EN work/muxWsignal 1507784734
-FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux_1.vhd 2017/10/12.09:50:18 P.20131013
-EN work/mux2data 1507783778 \
+      EN work/muxWsignal 1508099795
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux_1.vhd 2017/10/13.14:34:13 P.20131013
+EN work/mux2data 1508099779 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux_1.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/mux2data/Behavioral 1507783779 \
-      FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux_1.vhd EN work/mux2data 1507783778
-FL /home/vishal/xilinx/MIPS_32_bit_first_design/register_file.vhd 2017/10/12.07:31:23 P.20131013
-EN work/register_file 1507773692 \
+AR work/mux2data/Behavioral 1508099780 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/mux_1.vhd EN work/mux2data 1508099779
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/register_file.vhd 2017/10/15.16:44:18 P.20131013
+EN work/register_file 1508099791 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/register_file.vhd \
       PB ieee/std_logic_1164 1381692176 PB ieee/STD_LOGIC_UNSIGNED 1381692179 \
       PB ieee/NUMERIC_STD 1381692181
-AR work/register_file/Behavioral 1507773693 \
+AR work/register_file/Behavioral 1508099792 \
       FL /home/vishal/xilinx/MIPS_32_bit_first_design/register_file.vhd \
-      EN work/register_file 1507773692
+      EN work/register_file 1508099791
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_decode.vhd 2017/10/16.01:33:03 P.20131013
+EN work/reg_decode 1508099793 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_decode.vhd \
+      PB ieee/std_logic_1164 1381692176
+AR work/reg_decode/Behavioral 1508099794 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_decode.vhd \
+      EN work/reg_decode 1508099793
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_execute.vhd 2017/10/16.01:34:10 P.20131013
+EN work/reg_execute 1508099801 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_execute.vhd \
+      PB ieee/std_logic_1164 1381692176
+AR work/reg_execute/Behavioral 1508099802 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_execute.vhd \
+      EN work/reg_execute 1508099801
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_fetch.vhd 2017/10/15.17:54:32 P.20131013
+EN work/reg_fetch 1508099787 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_fetch.vhd \
+      PB ieee/std_logic_1164 1381692176
+AR work/reg_fetch/Behavioral 1508099788 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_fetch.vhd \
+      EN work/reg_fetch 1508099787
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_memory.vhd 2017/10/16.01:34:50 P.20131013
+EN work/reg_memory 1508099805 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_memory.vhd \
+      PB ieee/std_logic_1164 1381692176
+AR work/reg_memory/Behavioral 1508099806 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_memory.vhd \
+      EN work/reg_memory 1508099805
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_pc.vhd 2017/10/15.13:48:55 P.20131013
+EN work/reg_pc 1508099781 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_pc.vhd \
+      PB ieee/std_logic_1164 1381692176
+AR work/reg_pc/Behavioral 1508099782 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/reg_pc.vhd EN work/reg_pc 1508099781
+FL /home/vishal/xilinx/MIPS_32_bit_first_design/sign_extension.vhd 2017/10/12.10:46:37 P.20131013
+EN work/sign_extension 1508099789 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/sign_extension.vhd \
+      PB ieee/std_logic_1164 1381692176
+AR work/sign_extension/Behavioral 1508099790 \
+      FL /home/vishal/xilinx/MIPS_32_bit_first_design/sign_extension.vhd \
+      EN work/sign_extension 1508099789

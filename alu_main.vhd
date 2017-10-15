@@ -32,11 +32,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity alu_main is
     Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
            b : in  STD_LOGIC_VECTOR (31 downto 0);
+			  alu_opn : in  STD_LOGIC_VECTOR (2 downto 0);
            carry_out : out  STD_LOGIC;
-           alu_opn : in  STD_LOGIC_VECTOR (2 downto 0);
            zero : out  STD_LOGIC;
 			  --overflow : out  STD_LOGIC;
-           alu_result : out  STD_LOGIC_VECTOR (31 downto 0)
+           Alu_result : out  STD_LOGIC_VECTOR (31 downto 0)
 			  );
 end alu_main;
 
@@ -99,6 +99,6 @@ begin
 		temp_zero(i) <= temp_zero(i-1) nor result(i);
 	end generate;
 	zero <= temp_zero(31);
-	alu_result <= result;
+	Alu_result <= result;
 	carry_out <= c_out(31);
 end Behavioral;

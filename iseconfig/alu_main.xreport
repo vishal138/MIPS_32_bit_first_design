@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2017-10-15T10:16:14</DateModified>
+  <DateModified>2017-10-15T15:22:27</DateModified>
   <ModuleName>alu_main</ModuleName>
   <SummaryTimeStamp>Unknown</SummaryTimeStamp>
   <SavedFilePath>/home/vishal/xilinx/MIPS_32_bit_first_design/iseconfig/alu_main.xreport</SavedFilePath>
