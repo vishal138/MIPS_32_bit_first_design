@@ -30,7 +30,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Main is
-	Port (clk : in STD_LOGIC);
+	Port (clk : in STD_LOGIC;
+			wr : in STD_LOGIC;
+			data : in STD_LOGIC_VECTOR(31 downto 0);
+			pc_rst : in STD_LOGIC;
+			instradd: in STD_LOGIC_VECTOR(31 downto 0);
+			Debug : out STD_LOGIC_VECTOR(31 downto 0);
+			test : out STD_LOGIC_VECTOR(31 downto 0);
+			ANSWER : out STD_LOGIC_VECTOR(31 downto 0));
 end Main;
 architecture Behavioral of Main is
 Component alu_main is
@@ -50,17 +57,18 @@ end component;
 Component Instruction_memory is
 	Port ( pc : in  STD_LOGIC_VECTOR (31 downto 0);
            instrF : out  STD_LOGIC_VECTOR (31 downto 0);
+			  instradd : in STD_LOGIC_VECTOR (31 downto 0);
 			  wr : in STD_LOGIC;                                   --this is for programming
 			  data : in STD_LOGIC_VECTOR (31 downto 0));
 end component;
 Component mux1bit is
 	 Port ( a : in  STD_LOGIC;
            b : in  STD_LOGIC;
-           sel : in  STD_LOGIC;
-           c : out  STD_LOGIC);
+           c : out  STD_LOGIC;
+			  sel : in  STD_LOGIC);
 end component;
 Component data_memory is
-	Port (	clk : in STD_LOGIC;
+	Port (	
 				add : in  STD_LOGIC_VECTOR (31 downto 0);
 			   we : in STD_LOGIC;
 			   WD : in STD_LOGIC_VECTOR (31 downto 0);
@@ -70,7 +78,7 @@ Component mul4 is
 	Port (  a : in  STD_LOGIC_VECTOR (31 downto 0);
            b : out  STD_LOGIC_VECTOR (31 downto 0));
 end component;
-Component mux2data is
+Component mux1data is
 	Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
            b : in  STD_LOGIC_VECTOR (31 downto 0);
            c : out  STD_LOGIC_VECTOR (31 downto 0);
@@ -97,21 +105,7 @@ Component reg_decode is
            instr1D : in  STD_LOGIC_VECTOR (4 downto 0);
 			  instr1E : out  STD_LOGIC_VECTOR (4 downto 0);
            instr2D : in  STD_LOGIC_VECTOR (4 downto 0);
-			  instr2E : out  STD_LOGIC_VECTOR (4 downto 0);
-           RegWriteD : in  STD_LOGIC;
-           RegWriteE : out  STD_LOGIC;
-           MemtoRegD : in  STD_LOGIC;
-           MemtoRegE : out  STD_LOGIC;
-           MemWriteD : in  STD_LOGIC;
-           MemWriteE : out  STD_LOGIC;
-           BranchD : in  STD_LOGIC;
-           BranchE : out  STD_LOGIC;
-           AluControlD : in  STD_LOGIC_VECTOR (2 downto 0);
-           AluControlE : out  STD_LOGIC_VECTOR (2 downto 0);
-           AluSrcD : in  STD_LOGIC;
-           AluSrcE : out  STD_LOGIC;
-           WriteRegSelD : in  STD_LOGIC;
-           WriteRegSelE : out  STD_LOGIC);
+			  instr2E : out  STD_LOGIC_VECTOR (4 downto 0));
 end component;
 Component reg_execute is
 	Port ( clk : in  STD_LOGIC;
@@ -161,12 +155,13 @@ Component reg_memory is
            ReadDataW : out  STD_LOGIC_VECTOR (31 downto 0));
 end component;
 Component reg_pc is
-	Port ( clk : in  STD_LOGIC;
-           pc_next : in  STD_LOGIC_VECTOR (31 downto 0);
+	 Port ( clk : in  STD_LOGIC;
+			  pc_rst : in STD_LOGIC;
+			  pc_next : in  STD_LOGIC_VECTOR (31 downto 0);
 			  pc : out  STD_LOGIC_VECTOR (31 downto 0));
 end component;
 Component register_file is
-	Port (  clk : in  STD_LOGIC;
+	Port (
 			  r1 : in  STD_LOGIC_VECTOR (4 downto 0);
            r2 : in  STD_LOGIC_VECTOR (4 downto 0);
            wr : in  STD_LOGIC_VECTOR (4 downto 0);
@@ -179,41 +174,233 @@ Component sign_extension is
 	Port ( a : in  STD_LOGIC_VECTOR (15 downto 0);
            b : out  STD_LOGIC_VECTOR (31 downto 0));
 end component;
+Component mux4data is
+	Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
+           b : in  STD_LOGIC_VECTOR (31 downto 0);
+           c : in  STD_LOGIC_VECTOR (31 downto 0);
+           d : in  STD_LOGIC_VECTOR (31 downto 0);
+           e : out  STD_LOGIC_VECTOR (31 downto 0);
+           sel : in  STD_LOGIC_VECTOR (1 downto 0));
+end component;
+Component comparator_32bit is
+	 Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
+           b : in  STD_LOGIC_VECTOR (31 downto 0);
+           c : out  STD_LOGIC);
+end component;
+Component And32Bit is
+    Port ( a : in  STD_LOGIC_VECTOR (31 downto 0);
+           b : in  STD_LOGIC_VECTOR (31 downto 0);
+           c : out  STD_LOGIC_VECTOR (31 downto 0));
+end component;
 Signal four_32bit:STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000100";
 Signal zero_32bit:STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
-Signal pc_next,pc,pc_plus4F,pc_plus4D,pc_plus4E,PCBranchM,PCBranchE,instrF,instrD,R1D,R1E,R2D,R2E:STD_LOGIC_VECTOR(31 downto 0);
-Signal immD,immE,imm4,WriteDataM,WriteDataE,AluB,AluResultE,AluResultM,AluResultW,ReadDataE,ReadDataM,ReadDataW,Result:STD_LOGIC_VECTOR(31 downto 0);
-Signal r1,r2,WriteRegW,WriteRegE,WriteRegM,instr1D,instr2D,instr1E,instr2E:STD_LOGIC_VECTOR(4 downto 0);
-Signal pcSrcM,ZeroE,ZeroM : STD_LOGIC;
-Signal RegWriteD,RegWriteE,RegWriteM,RegWriteW,MemtoRegD,MemtoRegE,MemtoRegM,MemtoRegW:STD_LOGIC;
-Signal MemWriteD,MemWriteE,MemWriteM,BranchD,BranchE,BranchM,CarryOut : STD_LOGIC;
-Signal AluControlD,AluControlE : STD_LOGIC_VECTOR(2 downto 0);
-Signal AluSrcD,AluSrcE,WriteRegSelD,WriteRegSelE : STD_LOGIC; 
-Signal clrFetch,clrDecode,clrExecute,clrMemory : STD_LOGIC;
-Signal stallFetch,stallDecode,stallExecute,stallMemory : STD_LOGIC;
-Signal imm :STD_LOGIC_VECTOR(15 downto 0);
+Signal pc_next,pc,pc_plus4F,pc_plus4D,pc_plus4E,PCBranchD,PCBranchM,PCBranchE,instrF,instrD,R1D,R1E,R2D,R2E:STD_LOGIC_VECTOR(31 downto 0):=(others=> '0');
+Signal immD,immE,imm4,WriteDataM,WriteDataE,AluB,AluA,AluResultE,AluResultM,AluResultW,ReadDataE,ReadDataM,ReadDataW,Result:STD_LOGIC_VECTOR(31 downto 0):=(others=> '0');
+Signal r1,r2,WriteRegW,WriteRegE,WriteRegM,instr1D,instr2D,instr1E,instr2E:STD_LOGIC_VECTOR(4 downto 0):=(others=> '0');
+Signal pcSrcM,ZeroE,ZeroM,comp_out : STD_LOGIC:= '0';
+Signal RegWriteD,RegWriteE,RegWriteM,RegWriteW,MemtoRegD,MemtoRegE,MemtoRegM,MemtoRegW:STD_LOGIC:= '0';
+Signal MemWriteD,MemWriteE,MemWriteM,BranchD,BranchE,BranchM,CarryOut : STD_LOGIC:= '0';
+Signal AluControlD,AluControlE : STD_LOGIC_VECTOR(2 downto 0):=(others=> '0');
+Signal AluSrcD,AluSrcE,WriteRegSelD,WriteRegSelE : STD_LOGIC:= '0'; 
+Signal clrFetch,clrDecode,clrExecute,clrMemory : STD_LOGIC:= '0';
+Signal stallFetch,stallDecode,stallExecute,stallMemory : STD_LOGIC:= '0';
+Signal imm :STD_LOGIC_VECTOR(15 downto 0):=(others=> '0');
+Signal ForwardAE,ForwardBE : STD_LOGIC_VECTOR(1 downto 0):=(others=> '0');
+Signal MaskLowerByte : STD_LOGIC_VECTOR(31 downto 0):= "00000000000000000000000011111111";
 begin
 	instr1D <= instrD(20 downto 16);
 	instr2D <= instrD(15 downto 11);
-	WriteDataE <= R2E;
+	--WriteDataE <= R2E;
 	r1 <= instrD(25 downto 21);
 	r2 <= instr1D;
 	imm <= instrD(15 downto 0);
-	U1:mux2data PORT MAP(pc_plus4F,PCBranchM,pc_next,pcSrcM);
-	U2:reg_pc PORT MAP(clk,pc_next,pc);
+	Debug  <= AluB;
+	test <= R1E;
+	ANSWER <= Result;
+	
+	U1:mux1data PORT MAP(pc_plus4F,PCBranchM,pc_next,pcSrcM);
+	U2:reg_pc PORT MAP(clk,pc_rst,pc_next,pc);
 	U3:alu_adder PORT MAP(pc,four_32bit,pc_plus4F);
-	U4:Instruction_memory PORT MAP(pc,instrF,'0',zero_32bit);
+	U4:Instruction_memory PORT MAP(pc,instrF,instradd,wr,data);
 	U5:reg_fetch PORT MAP(clk,clrFetch,stallFetch,instrF,instrD,pc_plus4F,pc_plus4D);
 	U6:sign_extension PORT MAP(imm,immD);
-	U7:register_file PORT MAP(clk,r1,r2,WriteRegW,RegWriteW,R1D,R2D,Result);
-	U8:reg_decode PORT MAP(clk,clrDecode,stallDecode,R1D,R1E,R2D,R2E,immD,immE,pc_plus4D,pc_plus4E,instr1D,instr1E,instr2D,instr2E,RegWriteD,RegWriteE,MemtoRegD,MemtoRegE,MemWriteD,MemWriteE,BranchD,BranchE,AluControlD,AluControlE,AluSrcD,AluSrcE,WriteRegSelD,WriteRegSelE);
-	U9:mux2data PORT MAP(R2E,immE,AluB,AluSrcE);           
-   U10:muxWsignal PORT MAP(instr1E,instr2E,WriteRegE,WriteRegSelE);
-	U11:mul4 PORT MAP(immE,imm4);
-	U12:alu_adder PORT MAP(imm4,pc_plus4E,PCBranchE);
-	--U13:mux2data PORT MAP(R2E,immE,AluB,AluSrcE);
+	U11:mul4 PORT MAP(immD,imm4);
+	U12:alu_adder PORT MAP(imm4,pc_plus4D,PCBranchD);
+	U7:register_file PORT MAP(r1,r2,WriteRegW,RegWriteW,R1D,R2D,Result);
+	U20:comparator_32bit PORT MAP(R1D,R2D,comp_out);
+	U8:reg_decode PORT MAP(clk,clrDecode,stallDecode,R1D,R1E,R2D,R2E,immD,immE,pc_plus4D,pc_plus4E,instr1D,instr1E,instr2D,instr2E);
+	U18:mux4data PORT MAP(R1E,AluResultM,Result,R2E,AluA,forwardAE);
+	U19:mux4data PORT MAP(R2E,AluResultM,Result,R1E,WriteDataE,forwardBE);
+	U9:mux1data PORT MAP(WriteDataE,immE,AluB,AluSrcE);           
+   U10:muxWsignal PORT MAP(instr1E,instr2E,WriteRegE,WriteRegSelE);	
+	U13:mux1data PORT MAP(R2E,immE,AluB,AluSrcE);
 	U14:alu_main PORT MAP(R1E,AluB,AluControlE,CarryOut,ZeroE,AluResultE);
 	U15:reg_execute PORT MAP(clk,clrExecute,stallExecute,RegWriteE,RegWriteM,MemtoRegE,MemtoRegM,MemWriteE,MemWriteM,BranchE,BranchM,ZeroE,ZeroM,AluResultE,AluResultM,WriteDataE,WriteDataM,WriteRegE,WriteRegM,PCBranchE,PCBranchM);
-	U16:data_memory PORT MAP(clk,AluResultM,MemWriteM,WriteDataM,ReadDataM);									--check weather clk is needed or not
+	--U21:And32Bit PORT MAP(WriteDataM,MaskLowerByte,WriteDataAndM);
+	U16:data_memory PORT MAP(AluResultM,MemWriteM,WriteDataM,ReadDataM);									--check weather clk is needed or not
 	U17:reg_memory PORT MAP(clk,clrMemory,stallMemory,RegWriteM,RegWriteW,MemtoRegM,MemtoRegW,WriteRegM,WriteRegW,AluResultM,AluResultW,ReadDataM,ReadDataW);
-end Behavioral;
+	U22:mux1data PORT MAP(ReadDataW,AluResultW,Result,MemtoRegW);
+	--control signals
+		Process(clk)
+		begin
+			if(clk='1') then
+				case instrD(31 downto 26) is 
+					when "000000" =>
+						case instrD(5 downto 0) is 
+							when "100000" =>           			--add
+								RegWriteE <= '1';
+								MemtoRegE <= '1';
+								MemWriteE <= '0';
+								AluControlE <= "001";
+								AluSrcE <= '0';
+								WriteRegSelE <= '1';
+								BranchE <= '0';
+							when "100010" =>							--sub
+								RegWriteE <= '1';
+								MemtoRegE <= '1';
+								MemWriteE <= '0';
+								AluControlE <= "010";
+								AluSrcE <= '0';
+								WriteRegSelE <= '1';
+								BranchE <= '0';
+							when "100100" =>							--And
+								RegWriteE <= '1';
+								MemtoRegE <= '1';
+								MemWriteE <= '0';
+								AluControlE <= "011";
+								AluSrcE <= '0';
+								WriteRegSelE <= '1';
+								BranchE <= '0';
+							when "100101" =>							--Or
+								RegWriteE <= '1';
+								MemtoRegE <= '1';
+								MemWriteE <= '0';
+								AluControlE <= "100";
+								AluSrcE <= '0';
+								WriteRegSelE <= '1';
+								BranchE <= '0';
+							when "100110" =>							--xor
+								RegWriteE <= '1';
+								MemtoRegE <= '1';
+								MemWriteE <= '0';
+								AluControlE <= "111";
+								AluSrcE <= '0';
+								WriteRegSelE <= '1';
+								BranchE <= '0';
+							when "100111" =>							--Nand
+								RegWriteE <= '1';
+								MemtoRegE <= '1';
+								MemWriteE <= '0';
+								AluControlE <= "101";
+								AluSrcE <= '0';
+								WriteRegSelE <= '1';
+								BranchE <= '0';
+							when "101000" =>							--Nor
+								RegWriteE <= '1';
+								MemtoRegE <= '1';
+								MemWriteE <= '0';
+								AluControlE <= "110";
+								AluSrcE <= '0';
+								WriteRegSelE <= '1';
+								BranchE <= '0';
+							when others =>
+								RegWriteE <= '0';
+								MemtoRegE <= '0';
+								MemWriteE <= '0';
+								AluControlE <= "000";
+								AluSrcE <= '0';
+								WriteRegSelE <= '0';
+								BranchE <= '0';
+							end case;
+						when "001000" => 								--Addi
+							RegWriteE <= '1';
+							MemtoRegE <= '1';
+							MemWriteE <= '0';
+							AluControlE <= "001";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "001010" =>									--sui
+							RegWriteE <= '1';
+							MemtoRegE <= '1';
+							MemWriteE <= '0';
+							AluControlE <= "010";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "001100" =>									--ANDi
+							RegWriteE <= '1';
+							MemtoRegE <= '1';
+							MemWriteE <= '0';
+							AluControlE <= "011";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "001101" => 									--ORi
+							RegWriteE <= '1';
+							MemtoRegE <= '1';
+							MemWriteE <= '0';
+							AluControlE <= "100";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "001110" =>     							--xori
+							RegWriteE <= '1';
+							MemtoRegE <= '1';
+							MemWriteE <= '0';
+							AluControlE <= "111";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "001111" =>                         --NANDi
+							RegWriteE <= '1';
+							MemtoRegE <= '1';
+							MemWriteE <= '0';
+							AluControlE <= "101";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "010000" =>								--NORi
+							RegWriteE <= '1';
+							MemtoRegE <= '1';
+							MemWriteE <= '0';
+							AluControlE <= "110";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "000100" =>							--BEQ
+							RegWriteE <= '0';
+							MemtoRegE <= '0';
+							MemWriteE <= '0';
+							AluControlE <= "000";
+							AluSrcE <= '0';
+							WriteRegSelE <= '0';
+							BranchE <= '1';
+						when "100011" =>							--LW
+							RegWriteE <= '1';
+							MemtoRegE <= '0';
+							MemWriteE <= '0';
+							AluControlE <= "001";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when "101011" =>							--SW
+							RegWriteE <= '0';
+							MemtoRegE <= '0';
+							MemWriteE<= '1';
+							AluControlE <= "001";
+							AluSrcE <= '1';
+							WriteRegSelE <= '0';
+							BranchE <= '0';
+						when others =>
+								RegWriteE <= '0';
+								MemtoRegE <= '0';
+								MemWriteE <= '0';
+								AluControlE <= "000";
+								AluSrcE <= '0';
+								WriteRegSelE <= '0';
+								BranchE <= '0';
+						end case;
+			end if;
+		end process;
+	end Behavioral;

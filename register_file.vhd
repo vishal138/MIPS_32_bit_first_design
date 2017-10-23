@@ -31,7 +31,7 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity register_file is
-    Port ( clk : in  STD_LOGIC;
+    Port (
 			  r1 : in  STD_LOGIC_VECTOR (4 downto 0);
            r2 : in  STD_LOGIC_VECTOR (4 downto 0);
            wr : in  STD_LOGIC_VECTOR (4 downto 0);
@@ -44,18 +44,25 @@ end register_file;
 architecture Behavioral of register_file is
 Type array1 is array(0 to 31) of STD_LOGIC_VECTOR(31 downto 0);
 Signal reg : array1;
+Signal zero_32bit:STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
 begin
-	process(clk)
+	
+	process(wr_enable,r1,r2,wr,W3)
 	VARIABLE temp:integer range 0 to 31 := 0;
 	begin
-		if(clk = '1') then
+		reg(0) <= "00000000000000000000000000000000";
+		if(wr_enable = '0') then
 			temp := to_integer(unsigned(r1(4 downto 0)));
 			R1D <= reg(temp);
 			temp := to_integer(unsigned(r2(4 downto 0)));
 			R2D <= reg(temp);
-		elsif(clk = '0' and wr_enable = '1') then           --this accounts for RAW Hazard  
+		elsif(wr_enable = '1') then           
 				temp := to_integer(unsigned(wr(4 downto 0)));
 				reg(temp) <= W3;	
+				temp := to_integer(unsigned(r1(4 downto 0)));
+				R1D <= reg(temp);
+				temp := to_integer(unsigned(r2(4 downto 0)));
+				R2D <= reg(temp);
 		end if;
 	end process;
 end Behavioral;

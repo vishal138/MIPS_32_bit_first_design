@@ -1,0 +1,65 @@
+Running: /home/vishal/14.7/ISE_DS/ISE/bin/lin64/unwrapped/fuse -intstyle ise -incremental -o /home/vishal/xilinx/MIPS_32_bit_first_design/simulation_isim_beh.exe -prj /home/vishal/xilinx/MIPS_32_bit_first_design/simulation_beh.prj work.simulation 
+ISim P.20131013 (signature 0xfbc00daa)
+Number of CPUs detected in this system: 4
+Turning on mult-threading, number of parallel sub-compilation jobs: 8 
+Determining compilation order of HDL files
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/mux4sel1bit.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/mux1bit.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd" into library work
+WARNING:HDLCompiler:946 - "/home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd" Line 62: Actual for formal port b is neither a static name nor a globally static expression
+WARNING:HDLCompiler:946 - "/home/vishal/xilinx/MIPS_32_bit_first_design/alu1bit.vhd" Line 63: Actual for formal port b is neither a static name nor a globally static expression
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/sign_extension.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/reg_pc.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/reg_memory.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/reg_fetch.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/reg_execute.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/reg_decode.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/register_file.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/muxWsignal.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/mux4data.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/mux1data.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/mul4.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/Instruction_memory.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/data_memory.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/comparator_32bit.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/alu_main.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/alu_adder.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/Main.vhd" into library work
+Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/simulation.vhd" into library work
+Starting static elaboration
+Completed static elaboration
+Fuse Memory Usage: 99076 KB
+Fuse CPU Usage: 1190 ms
+Compiling package standard
+Compiling package std_logic_1164
+Compiling package std_logic_arith
+Compiling package std_logic_unsigned
+Compiling package numeric_std
+Compiling architecture behavioral of entity mux1data [mux1data_default]
+Compiling architecture behavioral of entity reg_pc [reg_pc_default]
+Compiling architecture behavioral of entity alu_adder [alu_adder_default]
+Compiling architecture behavioral of entity Instruction_memory [instruction_memory_default]
+Compiling architecture behavioral of entity reg_fetch [reg_fetch_default]
+Compiling architecture behavioral of entity sign_extension [sign_extension_default]
+Compiling architecture behavioral of entity mul4 [mul4_default]
+Compiling architecture behavioral of entity register_file [register_file_default]
+Compiling architecture behavioral of entity comparator_32bit [comparator_32bit_default]
+Compiling architecture behavioral of entity reg_decode [reg_decode_default]
+Compiling architecture behavioral of entity mux4data [mux4data_default]
+Compiling architecture behavioral of entity muxWsignal [muxwsignal_default]
+Compiling architecture behavioral of entity mux1bit [mux1bit_default]
+Compiling architecture behavioral of entity mux4sel1bit [mux4sel1bit_default]
+Compiling architecture behavioral of entity alu1bit [alu1bit_default]
+Compiling architecture behavioral of entity alu_main [alu_main_default]
+Compiling architecture behavioral of entity reg_execute [reg_execute_default]
+Compiling architecture behavioral of entity data_memory [data_memory_default]
+Compiling architecture behavioral of entity reg_memory [reg_memory_default]
+Compiling architecture behavioral of entity Main [main_default]
+Compiling architecture behavior of entity simulation
+Time Resolution for simulation is 1ps.
+Waiting for 8 sub-compilation(s) to finish...
+Compiled 46 VHDL Units
+Built simulation executable /home/vishal/xilinx/MIPS_32_bit_first_design/simulation_isim_beh.exe
+Fuse Memory Usage: 675404 KB
+Fuse CPU Usage: 1410 ms
+GCC CPU Usage: 1300 ms

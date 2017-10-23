@@ -31,16 +31,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity reg_pc is
     Port ( clk : in  STD_LOGIC;
-           pc : out  STD_LOGIC_VECTOR (31 downto 0);
-           pc_next : in  STD_LOGIC_VECTOR (31 downto 0));
+			  pc_rst : in STD_LOGIC;
+			  pc_next : in  STD_LOGIC_VECTOR (31 downto 0);
+			  pc : out  STD_LOGIC_VECTOR (31 downto 0));
 end reg_pc;
 
 architecture Behavioral of reg_pc is
 begin
 	process(clk)
 	begin
-		if(clk='1') then
+		if(clk='1' and pc_rst ='0') then
 			pc <= pc_next;
+		elsif(pc_rst = '1') then
+			pc  <= (others=>'0');
 		end if;
 	end process;
 end Behavioral;

@@ -38,6 +38,5 @@ end alu_adder;
 architecture Behavioral of alu_adder is
 begin
 		c <= a + b;
-
 end Behavioral;
 

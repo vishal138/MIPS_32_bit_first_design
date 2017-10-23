@@ -56,7 +56,7 @@ Port ( a : in  STD_LOGIC;
            e : out  STD_LOGIC);
 end component;
 signal ainp,binp:STD_LOGIC:='0';
-signal and_out,or_out,sum_out : STD_LOGIC := '0';
+signal and_out,or_out,sum_out,xor_out : STD_LOGIC := '0';
 begin
 -- this section is for inverting a and b 
 	U1: mux1bit port map(a,not(a),ainv,ainp);
@@ -65,5 +65,6 @@ begin
 	or_out <= ainp OR binp;
 	sum_out <= ((ainp xor binp) xor cin);
 	cout <= (ainp  and binp) or ( ainp and cin) or (binp and cin);
-	U3: mux4sel1bit PORT MAP(and_out,or_out,sum_out,'0',aluop,alu_out);
+	xor_out <= (a and binp) or ( ainp and b);
+	U3: mux4sel1bit PORT MAP(and_out,or_out,sum_out,xor_out,aluop,alu_out);
 end Behavioral;	

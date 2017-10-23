@@ -44,21 +44,7 @@ entity reg_decode is
            instr1D : in  STD_LOGIC_VECTOR (4 downto 0);
 			  instr1E : out  STD_LOGIC_VECTOR (4 downto 0);
            instr2D : in  STD_LOGIC_VECTOR (4 downto 0);
-			  instr2E : out  STD_LOGIC_VECTOR (4 downto 0);
-           RegWriteD : in  STD_LOGIC;
-           RegWriteE : out  STD_LOGIC;
-           MemtoRegD : in  STD_LOGIC;
-           MemtoRegE : out  STD_LOGIC;
-           MemWriteD : in  STD_LOGIC;
-           MemWriteE : out  STD_LOGIC;
-           BranchD : in  STD_LOGIC;
-           BranchE : out  STD_LOGIC;
-           AluControlD : in  STD_LOGIC_VECTOR (2 downto 0);
-           AluControlE : out  STD_LOGIC_VECTOR (2 downto 0);
-           AluSrcD : in  STD_LOGIC;
-           AluSrcE : out  STD_LOGIC;
-           WriteRegSelD : in  STD_LOGIC;
-           WriteRegSelE : out  STD_LOGIC);
+			  instr2E : out  STD_LOGIC_VECTOR (4 downto 0));
 end reg_decode;
 
 architecture Behavioral of reg_decode is
@@ -73,13 +59,6 @@ begin
 				pc_plus4E <= pc_plus4D;
 				instr1E <= instr1D;
 				instr2E <= instr2D;
-				RegWriteE <= RegWriteD;
-				RegWriteE <= RegWriteD;
-				MemtoRegE <= MemtoRegD;
-				BranchE <= BranchD;
-				AluControlE <= AluControlD;
-				AluSrcE <= AluSrcD;
-				WriteRegSelE <= WriteRegSelD;
 			elsif(clrDecode = '1') then       --for flushing data
 				R1E <= R1D;
 				R2E <= R2D;
@@ -87,13 +66,6 @@ begin
 				pc_plus4E <= pc_plus4D;
 				instr1E <= instr1D;
 				instr2E <= instr2D;
-				RegWriteE <= RegWriteD;
-				RegWriteE <= RegWriteD;
-				MemtoRegE <= MemtoRegD;
-				BranchE <= BranchD;
-				AluControlE <= AluControlD;
-				AluSrcE <= AluSrcD;
-				WriteRegSelE <= WriteRegSelD;
 			end if;
 		end if;
 	end process;

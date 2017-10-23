@@ -38,7 +38,9 @@ architecture Behavioral of sign_extension is
 
 begin
 	b(15 downto 0) <= a(15 downto 0);
-	
+	for_loop:for i in 16 to 31 generate
+		b(i) <= a(15);
+	end generate;
 
 end Behavioral;
 

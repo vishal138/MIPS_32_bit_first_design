@@ -91,6 +91,8 @@ begin
 				alu_op <= "10";
 			when others =>
 				alu_op <= "11";
+				ainv <= '1';
+				binv <= '1';
 		end case;
 	end process;
 		U1: alu1bit PORT MAP(a(0),b(0),ainv,binv,cin,alu_op,c_out(0),result(0));

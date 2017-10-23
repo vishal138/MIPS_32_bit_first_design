@@ -30,7 +30,7 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity data_memory is
-	Port (	clk : in STD_LOGIC;
+	Port (	
 				add : in  STD_LOGIC_VECTOR (31 downto 0);
 			   we : in STD_LOGIC;
 			   WD : in STD_LOGIC_VECTOR (31 downto 0);
@@ -41,10 +41,11 @@ architecture Behavioral of data_memory is
 Type array_data is array(0 to 1023) of STD_LOGIC_VECTOR(31 downto 0);
 Signal data_reg : array_data;
 begin
-	process(clk)
+	process(add,we,WD)
 	variable  temp : integer range 0 to 1023 := 0;
 	begin
-		if(clk'EVENT and clk = '1') then
+		data_reg(4) <= "00000000000000000000000000001010";
+		
 			if(we ='1') then
 				temp := to_integer(unsigned(add(31 downto 0)));
 				data_reg(temp) <= WD;
@@ -52,6 +53,5 @@ begin
 				temp := to_integer(unsigned(add(31 downto 0)));
 				RD <= data_reg(temp);
 			end if;
-		end if;
 	end process;
 end Behavioral;
