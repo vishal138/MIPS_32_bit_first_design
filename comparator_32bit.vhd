@@ -42,12 +42,13 @@ begin
 	begin
 		for_loop:for i in 0 to 31 loop
 						m := a(i) xor b(i);
-						if(m = '1') then
+						if(m = '0') then
 							k := '1';
+						else
+							k := '0';
 						end if;
 					end loop for_loop;
-			c<=k;
-			k:='0';
+			c <= k;
 	end process;			
 end Behavioral;
 

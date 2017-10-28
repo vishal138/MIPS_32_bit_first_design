@@ -117,8 +117,6 @@ Component reg_execute is
            MemtoRegM : out  STD_LOGIC;
            MemWriteE : in  STD_LOGIC;
            MemWriteM : out  STD_LOGIC;
-           BranchE : in  STD_LOGIC;
-           BranchM : out  STD_LOGIC;
            ZeroE : inout  STD_LOGIC;
            ZeroM : out  STD_LOGIC;
            AluResultE : in  STD_LOGIC_VECTOR (31 downto 0);
@@ -197,9 +195,9 @@ Signal zero_32bit:STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
 Signal pc_next,pc,pc_plus4F,pc_plus4D,pc_plus4E,PCBranchD,PCBranchM,PCBranchE,instrF,instrD,R1D,R1E,R2D,R2E:STD_LOGIC_VECTOR(31 downto 0):=(others=> '0');
 Signal immD,immE,imm4,WriteDataM,WriteDataE,AluB,AluA,AluResultE,AluResultM,AluResultW,ReadDataE,ReadDataM,ReadDataW,Result:STD_LOGIC_VECTOR(31 downto 0):=(others=> '0');
 Signal r1,r2,WriteRegW,WriteRegE,WriteRegM,instr1D,instr2D,instr1E,instr2E:STD_LOGIC_VECTOR(4 downto 0):=(others=> '0');
-Signal pcSrcM,ZeroE,ZeroM,comp_out : STD_LOGIC:= '0';
+Signal pcSrc,pcSrcEq,pcSrcNe,pcSrcCy,pcSrcNc,pcSrcZ,pcSrcNz,ZeroE,ZeroM,comp_out : STD_LOGIC:= '0';
 Signal RegWriteD,RegWriteE,RegWriteM,RegWriteW,MemtoRegD,MemtoRegE,MemtoRegM,MemtoRegW:STD_LOGIC:= '0';
-Signal MemWriteD,MemWriteE,MemWriteM,BranchD,BranchE,BranchM,CarryOut : STD_LOGIC:= '0';
+Signal MemWriteD,MemWriteE,MemWriteM,BranchEq,BranchNe,BranchCy,BranchNc,BranchZ,BranchNz,CarryOut : STD_LOGIC:= '0';
 Signal AluControlD,AluControlE : STD_LOGIC_VECTOR(2 downto 0):=(others=> '0');
 Signal AluSrcD,AluSrcE,WriteRegSelD,WriteRegSelE : STD_LOGIC:= '0'; 
 Signal clrFetch,clrDecode,clrExecute,clrMemory : STD_LOGIC:= '0';
@@ -214,11 +212,17 @@ begin
 	r1 <= instrD(25 downto 21);
 	r2 <= instr1D;
 	imm <= instrD(15 downto 0);
-	Debug  <= AluB;
-	test <= R1E;
-	ANSWER <= Result;
-	
-	U1:mux1data PORT MAP(pc_plus4F,PCBranchM,pc_next,pcSrcM);
+	Debug  <= AluResultM;
+	test <= ReadDataM;
+	ANSWER <= WriteDataM;
+	pcSrcEq <= BranchEq and comp_out;                              --comp_out in U20 
+	pcSrcNe <= BranchNe and not(comp_out);
+	pcSrcCy <= BranchCy and CarryOut;
+	pcSrcNc <= BranchNc and not(CarryOut);
+	pcSrcZ <= BranchZ and ZeroE;
+	pcSrcNz <= BranchNz and not(ZeroE);
+	pcSrc <= (pcSrcEq) or (pcSrcNe) or (pcSrcCy) or (pcSrcNc) or (pcSrcZ) or (pcSrcNz);
+	U1:mux1data PORT MAP(pc_plus4F,PCBranchM,pc_next,pcSrc);      
 	U2:reg_pc PORT MAP(clk,pc_rst,pc_next,pc);
 	U3:alu_adder PORT MAP(pc,four_32bit,pc_plus4F);
 	U4:Instruction_memory PORT MAP(pc,instrF,instradd,wr,data);
@@ -233,9 +237,9 @@ begin
 	U19:mux4data PORT MAP(R2E,AluResultM,Result,R1E,WriteDataE,forwardBE);
 	U9:mux1data PORT MAP(WriteDataE,immE,AluB,AluSrcE);           
    U10:muxWsignal PORT MAP(instr1E,instr2E,WriteRegE,WriteRegSelE);	
-	U13:mux1data PORT MAP(R2E,immE,AluB,AluSrcE);
+	--U13:mux1data PORT MAP(R2E,immE,AluB,AluSrcE);
 	U14:alu_main PORT MAP(R1E,AluB,AluControlE,CarryOut,ZeroE,AluResultE);
-	U15:reg_execute PORT MAP(clk,clrExecute,stallExecute,RegWriteE,RegWriteM,MemtoRegE,MemtoRegM,MemWriteE,MemWriteM,BranchE,BranchM,ZeroE,ZeroM,AluResultE,AluResultM,WriteDataE,WriteDataM,WriteRegE,WriteRegM,PCBranchE,PCBranchM);
+	U15:reg_execute PORT MAP(clk,clrExecute,stallExecute,RegWriteE,RegWriteM,MemtoRegE,MemtoRegM,MemWriteE,MemWriteM,ZeroE,ZeroM,AluResultE,AluResultM,WriteDataE,WriteDataM,WriteRegE,WriteRegM,PCBranchE,PCBranchM);
 	--U21:And32Bit PORT MAP(WriteDataM,MaskLowerByte,WriteDataAndM);
 	U16:data_memory PORT MAP(AluResultM,MemWriteM,WriteDataM,ReadDataM);									--check weather clk is needed or not
 	U17:reg_memory PORT MAP(clk,clrMemory,stallMemory,RegWriteM,RegWriteW,MemtoRegM,MemtoRegW,WriteRegM,WriteRegW,AluResultM,AluResultW,ReadDataM,ReadDataW);
@@ -254,7 +258,12 @@ begin
 								AluControlE <= "001";
 								AluSrcE <= '0';
 								WriteRegSelE <= '1';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							when "100010" =>							--sub
 								RegWriteE <= '1';
 								MemtoRegE <= '1';
@@ -262,7 +271,12 @@ begin
 								AluControlE <= "010";
 								AluSrcE <= '0';
 								WriteRegSelE <= '1';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							when "100100" =>							--And
 								RegWriteE <= '1';
 								MemtoRegE <= '1';
@@ -270,7 +284,12 @@ begin
 								AluControlE <= "011";
 								AluSrcE <= '0';
 								WriteRegSelE <= '1';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							when "100101" =>							--Or
 								RegWriteE <= '1';
 								MemtoRegE <= '1';
@@ -278,7 +297,12 @@ begin
 								AluControlE <= "100";
 								AluSrcE <= '0';
 								WriteRegSelE <= '1';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							when "100110" =>							--xor
 								RegWriteE <= '1';
 								MemtoRegE <= '1';
@@ -286,7 +310,12 @@ begin
 								AluControlE <= "111";
 								AluSrcE <= '0';
 								WriteRegSelE <= '1';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							when "100111" =>							--Nand
 								RegWriteE <= '1';
 								MemtoRegE <= '1';
@@ -294,7 +323,12 @@ begin
 								AluControlE <= "101";
 								AluSrcE <= '0';
 								WriteRegSelE <= '1';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							when "101000" =>							--Nor
 								RegWriteE <= '1';
 								MemtoRegE <= '1';
@@ -302,7 +336,12 @@ begin
 								AluControlE <= "110";
 								AluSrcE <= '0';
 								WriteRegSelE <= '1';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							when others =>
 								RegWriteE <= '0';
 								MemtoRegE <= '0';
@@ -310,7 +349,12 @@ begin
 								AluControlE <= "000";
 								AluSrcE <= '0';
 								WriteRegSelE <= '0';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 							end case;
 						when "001000" => 								--Addi
 							RegWriteE <= '1';
@@ -319,7 +363,12 @@ begin
 							AluControlE <= "001";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "001010" =>									--sui
 							RegWriteE <= '1';
 							MemtoRegE <= '1';
@@ -327,7 +376,12 @@ begin
 							AluControlE <= "010";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "001100" =>									--ANDi
 							RegWriteE <= '1';
 							MemtoRegE <= '1';
@@ -335,7 +389,12 @@ begin
 							AluControlE <= "011";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "001101" => 									--ORi
 							RegWriteE <= '1';
 							MemtoRegE <= '1';
@@ -343,7 +402,12 @@ begin
 							AluControlE <= "100";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';	
 						when "001110" =>     							--xori
 							RegWriteE <= '1';
 							MemtoRegE <= '1';
@@ -351,7 +415,12 @@ begin
 							AluControlE <= "111";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "001111" =>                         --NANDi
 							RegWriteE <= '1';
 							MemtoRegE <= '1';
@@ -359,7 +428,12 @@ begin
 							AluControlE <= "101";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "010000" =>								--NORi
 							RegWriteE <= '1';
 							MemtoRegE <= '1';
@@ -367,7 +441,12 @@ begin
 							AluControlE <= "110";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "000100" =>							--BEQ
 							RegWriteE <= '0';
 							MemtoRegE <= '0';
@@ -375,7 +454,77 @@ begin
 							AluControlE <= "000";
 							AluSrcE <= '0';
 							WriteRegSelE <= '0';
-							BranchE <= '1';
+							BranchEq <= '1';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
+						when "000101" =>						--BNE
+							RegWriteE <= '0';
+							MemtoRegE <= '0';
+							MemWriteE <= '0';
+							AluControlE <= "000";
+							AluSrcE <= '0';
+							WriteRegSelE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '1';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
+						when "000110" =>						--BCY
+							RegWriteE <= '0';
+							MemtoRegE <= '0';
+							MemWriteE <= '0';
+							AluControlE <= "000";
+							AluSrcE <= '0';
+							WriteRegSelE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '1';
+							BranchNc <= '0';
+						when "000111" =>						--BNC
+							RegWriteE <= '0';
+							MemtoRegE <= '0';
+							MemWriteE <= '0';
+							AluControlE <= "000";
+							AluSrcE <= '0';
+							WriteRegSelE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '1';
+						when "000010" =>						--BZ
+							RegWriteE <= '0';
+							MemtoRegE <= '0';
+							MemWriteE <= '0';
+							AluControlE <= "000";
+							AluSrcE <= '0';
+							WriteRegSelE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '1';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
+						when "000011" =>						--BNZ
+							RegWriteE <= '0';
+							MemtoRegE <= '0';
+							MemWriteE <= '0';
+							AluControlE <= "000";
+							AluSrcE <= '0';
+							WriteRegSelE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '1';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "100011" =>							--LW
 							RegWriteE <= '1';
 							MemtoRegE <= '0';
@@ -383,7 +532,12 @@ begin
 							AluControlE <= "001";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when "101011" =>							--SW
 							RegWriteE <= '0';
 							MemtoRegE <= '0';
@@ -391,7 +545,12 @@ begin
 							AluControlE <= "001";
 							AluSrcE <= '1';
 							WriteRegSelE <= '0';
-							BranchE <= '0';
+							BranchEq <= '0';
+							BranchNe <= '0';
+							BranchZ <= '0';
+							BranchNz <= '0';
+							BranchCy <= '0';
+							BranchNc <= '0';
 						when others =>
 								RegWriteE <= '0';
 								MemtoRegE <= '0';
@@ -399,7 +558,12 @@ begin
 								AluControlE <= "000";
 								AluSrcE <= '0';
 								WriteRegSelE <= '0';
-								BranchE <= '0';
+								BranchEq <= '0';
+								BranchNe <= '0';
+								BranchZ <= '0';
+								BranchNz <= '0';
+								BranchCy <= '0';
+								BranchNc <= '0';
 						end case;
 			end if;
 		end process;

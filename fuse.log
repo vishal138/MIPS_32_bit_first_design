@@ -29,7 +29,7 @@ Parsing VHDL file "/home/vishal/xilinx/MIPS_32_bit_first_design/simulation.vhd" 
 Starting static elaboration
 Completed static elaboration
 Fuse Memory Usage: 99076 KB
-Fuse CPU Usage: 1190 ms
+Fuse CPU Usage: 1310 ms
 Compiling package standard
 Compiling package std_logic_1164
 Compiling package std_logic_arith
@@ -57,9 +57,9 @@ Compiling architecture behavioral of entity reg_memory [reg_memory_default]
 Compiling architecture behavioral of entity Main [main_default]
 Compiling architecture behavior of entity simulation
 Time Resolution for simulation is 1ps.
-Waiting for 8 sub-compilation(s) to finish...
+Waiting for 12 sub-compilation(s) to finish...
 Compiled 46 VHDL Units
 Built simulation executable /home/vishal/xilinx/MIPS_32_bit_first_design/simulation_isim_beh.exe
 Fuse Memory Usage: 675404 KB
-Fuse CPU Usage: 1410 ms
-GCC CPU Usage: 1300 ms
+Fuse CPU Usage: 1530 ms
+GCC CPU Usage: 1320 ms

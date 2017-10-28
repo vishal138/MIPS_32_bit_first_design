@@ -51,6 +51,7 @@ begin
 	VARIABLE temp:integer range 0 to 31 := 0;
 	begin
 		reg(0) <= "00000000000000000000000000000000";
+		reg(1) <= "00000000000000000000000000001000";
 		if(wr_enable = '0') then
 			temp := to_integer(unsigned(r1(4 downto 0)));
 			R1D <= reg(temp);

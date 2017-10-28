@@ -39,8 +39,6 @@ entity reg_execute is
            MemtoRegM : out  STD_LOGIC;
            MemWriteE : in  STD_LOGIC;
            MemWriteM : out  STD_LOGIC;
-           BranchE : in  STD_LOGIC;
-           BranchM : out  STD_LOGIC;
            ZeroE : in  STD_LOGIC;
            ZeroM : out  STD_LOGIC;
            AluResultE : in  STD_LOGIC_VECTOR (31 downto 0);
@@ -62,7 +60,6 @@ begin
 				RegWriteM <= RegWriteE;
 				MemtoRegM <= MemtoRegE;
 				MemWriteM <= MemWriteE;
-				BranchM <= BranchE;
 				ZeroM <= ZeroE;
 				AluResultM <= AluResultE;
 				WriteDataM <= WriteDataE;
@@ -72,7 +69,6 @@ begin
 				RegWriteM <= RegWriteE;
 				MemtoRegM <= MemtoRegE;
 				MemWriteM <= MemWriteE;
-				BranchM <= BranchE;
 				ZeroM <= ZeroE;
 				AluResultM <= AluResultE;
 				WriteDataM <= WriteDataE;

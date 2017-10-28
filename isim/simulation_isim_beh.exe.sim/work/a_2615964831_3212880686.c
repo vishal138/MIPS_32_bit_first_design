@@ -61,29 +61,45 @@ LAB3:    t4 = (t0 + 3984);
     memcpy(t8, t1, 32U);
     xsi_driver_first_trans_delta(t4, 0U, 32U, 0LL);
     xsi_set_current_line(54, ng0);
+    t1 = (t0 + 8036);
+    t3 = (32U != 32U);
+    if (t3 == 1)
+        goto LAB4;
+
+LAB5:    t4 = (t0 + 3984);
+    t5 = (t4 + 56U);
+    t6 = *((char **)t5);
+    t7 = (t6 + 56U);
+    t8 = *((char **)t7);
+    memcpy(t8, t1, 32U);
+    xsi_driver_first_trans_delta(t4, 32U, 32U, 0LL);
+    xsi_set_current_line(55, ng0);
     t1 = (t0 + 1512U);
     t2 = *((char **)t1);
     t3 = *((unsigned char *)t2);
     t9 = (t3 == (unsigned char)2);
     if (t9 != 0)
-        goto LAB4;
+        goto LAB6;
 
-LAB6:    t1 = (t0 + 1512U);
+LAB8:    t1 = (t0 + 1512U);
     t2 = *((char **)t1);
     t3 = *((unsigned char *)t2);
     t9 = (t3 == (unsigned char)3);
     if (t9 != 0)
-        goto LAB7;
+        goto LAB9;
 
-LAB8:
-LAB5:    t1 = (t0 + 3904);
+LAB10:
+LAB7:    t1 = (t0 + 3904);
     *((int *)t1) = 1;
 
 LAB1:    return;
 LAB2:    xsi_size_not_matching(32U, 32U, 0);
     goto LAB3;
 
-LAB4:    xsi_set_current_line(55, ng0);
+LAB4:    xsi_size_not_matching(32U, 32U, 0);
+    goto LAB5;
+
+LAB6:    xsi_set_current_line(56, ng0);
     t1 = (t0 + 1032U);
     t4 = *((char **)t1);
     t10 = (4 - 4);
@@ -107,7 +123,7 @@ LAB4:    xsi_set_current_line(55, ng0);
     t7 = *((char **)t6);
     t6 = (t7 + 0);
     *((int *)t6) = t16;
-    xsi_set_current_line(56, ng0);
+    xsi_set_current_line(57, ng0);
     t1 = (t0 + 2152U);
     t2 = *((char **)t1);
     t1 = (t0 + 2608U);
@@ -126,7 +142,7 @@ LAB4:    xsi_set_current_line(55, ng0);
     t17 = *((char **)t8);
     memcpy(t17, t1, 32U);
     xsi_driver_first_trans_fast_port(t5);
-    xsi_set_current_line(57, ng0);
+    xsi_set_current_line(58, ng0);
     t1 = (t0 + 1192U);
     t2 = *((char **)t1);
     t10 = (4 - 4);
@@ -150,7 +166,7 @@ LAB4:    xsi_set_current_line(55, ng0);
     t6 = *((char **)t5);
     t5 = (t6 + 0);
     *((int *)t5) = t16;
-    xsi_set_current_line(58, ng0);
+    xsi_set_current_line(59, ng0);
     t1 = (t0 + 2152U);
     t2 = *((char **)t1);
     t1 = (t0 + 2608U);
@@ -169,9 +185,9 @@ LAB4:    xsi_set_current_line(55, ng0);
     t17 = *((char **)t8);
     memcpy(t17, t1, 32U);
     xsi_driver_first_trans_fast_port(t5);
-    goto LAB5;
+    goto LAB7;
 
-LAB7:    xsi_set_current_line(60, ng0);
+LAB9:    xsi_set_current_line(61, ng0);
     t1 = (t0 + 1352U);
     t4 = *((char **)t1);
     t10 = (4 - 4);
@@ -195,7 +211,7 @@ LAB7:    xsi_set_current_line(60, ng0);
     t7 = *((char **)t6);
     t6 = (t7 + 0);
     *((int *)t6) = t16;
-    xsi_set_current_line(61, ng0);
+    xsi_set_current_line(62, ng0);
     t1 = (t0 + 1992U);
     t2 = *((char **)t1);
     t1 = (t0 + 2608U);
@@ -212,7 +228,7 @@ LAB7:    xsi_set_current_line(60, ng0);
     t8 = *((char **)t7);
     memcpy(t8, t2, 32U);
     xsi_driver_first_trans_delta(t1, t12, 32U, 0LL);
-    xsi_set_current_line(62, ng0);
+    xsi_set_current_line(63, ng0);
     t1 = (t0 + 1032U);
     t2 = *((char **)t1);
     t10 = (4 - 4);
@@ -236,7 +252,7 @@ LAB7:    xsi_set_current_line(60, ng0);
     t6 = *((char **)t5);
     t5 = (t6 + 0);
     *((int *)t5) = t16;
-    xsi_set_current_line(63, ng0);
+    xsi_set_current_line(64, ng0);
     t1 = (t0 + 2152U);
     t2 = *((char **)t1);
     t1 = (t0 + 2608U);
@@ -255,7 +271,7 @@ LAB7:    xsi_set_current_line(60, ng0);
     t17 = *((char **)t8);
     memcpy(t17, t1, 32U);
     xsi_driver_first_trans_fast_port(t5);
-    xsi_set_current_line(64, ng0);
+    xsi_set_current_line(65, ng0);
     t1 = (t0 + 1192U);
     t2 = *((char **)t1);
     t10 = (4 - 4);
@@ -279,7 +295,7 @@ LAB7:    xsi_set_current_line(60, ng0);
     t6 = *((char **)t5);
     t5 = (t6 + 0);
     *((int *)t5) = t16;
-    xsi_set_current_line(65, ng0);
+    xsi_set_current_line(66, ng0);
     t1 = (t0 + 2152U);
     t2 = *((char **)t1);
     t1 = (t0 + 2608U);
@@ -298,7 +314,7 @@ LAB7:    xsi_set_current_line(60, ng0);
     t17 = *((char **)t8);
     memcpy(t17, t1, 32U);
     xsi_driver_first_trans_fast_port(t5);
-    goto LAB5;
+    goto LAB7;
 
 }
 
